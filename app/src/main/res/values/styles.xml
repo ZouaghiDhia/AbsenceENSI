@@ -1,0 +1,13 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- Customize your theme here. -->
+        <!-- This code is for changing the color of the bar. -->
+        <!-- Type your colour code which you want to set in colorPrimary item -->
+        <item name="colorPrimary">#22a89b</item>
+        <item name="colorPrimaryDark"> #22a89b </item>
+        <item name="colorAccent">#22a89b</item>
+</style>
+
+</resources>
