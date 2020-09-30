@@ -44,7 +44,7 @@
             android:layout_marginRight="33dp"
             android:paddingLeft="2dp"
             android:paddingTop="20dp"
-            android:src="@drawable/menu_icon" />
+            android:src="@drawable/remove" />
 
 
     </RelativeLayout>

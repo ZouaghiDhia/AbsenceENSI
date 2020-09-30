@@ -57,6 +57,7 @@ public class newActivity1 extends AppCompatActivity {
         editor.putString("task list", json);
         editor.apply();
     }
+
     private void loadData() {
         SharedPreferences sharedPreferences = getSharedPreferences("shared preferences", MODE_PRIVATE);
         Gson gson = new Gson();
@@ -69,18 +70,20 @@ public class newActivity1 extends AppCompatActivity {
     }
 
 
+
+
     private void creerRecyclerView() {
-        setOnClickListener();
-        RecyclerView mRecyclerView = findViewById(R.id.recyclerview);
+        setOnClickListener(); // on passe à l'activité modules en cliquanr sur le cardview
+        RecyclerView mRecyclerView = findViewById(R.id.recyclerview); //avoir acces au recyclerview via id
         mRecyclerView.setHasFixedSize(true);
-        mLayoutManager = new LinearLayoutManager(this);
+        mLayoutManager = new LinearLayoutManager(this); // c'est un layout manager prédefinie qui determine comment les cardviews seront affichée, ici c'est lineairement (thus the name DUH)
         mAdapter = new MyAdapter(Classes, listener);
-        mRecyclerView.setLayoutManager(mLayoutManager);
-        mRecyclerView.setAdapter(mAdapter);
+        mRecyclerView.setLayoutManager(mLayoutManager); //attacher le layoutmanager au recyclerview
+        mRecyclerView.setAdapter(mAdapter); //attacher l'adapter au recyclerview
 
     }
 
-    private void setOnClickListener() {
+    private void setOnClickListener() { //passer à l'activité module lorsque le view est cliqué (listener definie en adapter does the work and now we JUST tell them what to do)
 
         listener = new MyAdapter.mClickListener() {
             @Override
@@ -88,10 +91,7 @@ public class newActivity1 extends AppCompatActivity {
 
                 Intent intent = new Intent(getApplicationContext(), modules.class);
                 String class_name = Classes.get(position).getClasse_name();
-                String module_name = Classes.get(position).getModule_name();
-                intent.putExtra("Class", class_name);
-                intent.putExtra("module", module_name);
-
+                intent.putExtra("Class", class_name);  //sauvegarder le nom du classe du cardview choisi
                 startActivity(intent);
 
 
@@ -105,7 +105,6 @@ public class newActivity1 extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 EditText line = findViewById(R.id.edittext);
-
 
 
                 if (line.getText().toString().trim().length() <= 0) {

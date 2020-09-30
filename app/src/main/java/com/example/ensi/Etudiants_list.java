@@ -12,12 +12,11 @@ import android.widget.Toast;
 import androidx.appcompat.widget.Toolbar;
 import androidx.appcompat.app.AppCompatActivity;
 
-
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.hssf.util.HSSFColor;
 import org.apache.poi.ss.usermodel.BorderStyle;
 import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.CellStyle;          //package où les classes permettent la manipulation des fichiers
 import org.apache.poi.ss.usermodel.FillPatternType;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
@@ -26,14 +25,11 @@ import org.apache.poi.ss.usermodel.Workbook;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-
-import static org.apache.poi.ss.usermodel.FillPatternType.SOLID_FOREGROUND;
 
 
 public class Etudiants_list extends AppCompatActivity {
@@ -55,21 +51,24 @@ public class Etudiants_list extends AppCompatActivity {
             classname = extras.getString("Class");
             modulename = extras.getString("module");
         }
+
         this.setTitle(classname + " - " + modulename);
 
 
-      String[] dataetudiants= {"jimin","jk","joon","tae"};
+            String [] dataetudiants = {"Nom1   Prénom1" , "Nom2   Prénom2" , "Nom3   Prénom3" , "Nom4   Prénom4" , "Nom5   Prénom5" , "Nom6   Prénom6" , "Nom7   Prénom7" , "Nom8   Prénom8" , "Nom9   Prénom9" ,"Nom10  Prénom10"};
+
+
 
         ListView listview = (ListView) findViewById(R.id.listview);
 
-        listview.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
+        listview.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);  //check more than one checkbox in the list view
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.etudiants_layout, R.id.txt_ch, dataetudiants);
         listview.setAdapter(adapter);
         for (int i = 0; i < dataetudiants.length; i++) {
             Etudiants.add(new Student(dataetudiants[i]));
         }
 
-        listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {      //mal9it manekteb 7asitou wadhe7 tbh
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
@@ -78,17 +77,20 @@ public class Etudiants_list extends AppCompatActivity {
                     Etudiants.get(position).setChecked("A");
 
                 }
+                else{
+                    Etudiants.get(position).setChecked("");
+                }
             }
         });
 
     }
 
-    public void export(View view) {
+    public void export(View view) { // la création d'un fichier excel a eté fait grace à l'implémentation du biblioteque apache POI
 
-        Workbook wb = new HSSFWorkbook();
+        Workbook wb = new HSSFWorkbook();   //créer l'interface
         Cell cell = null;
 
-        CellStyle cellStyle = wb.createCellStyle();
+        CellStyle cellStyle = wb.createCellStyle();                                         //apply formatting
         CellStyle cellStyle2 = wb.createCellStyle();
         cellStyle.setFillForegroundColor(HSSFColor.AQUA.index);
         cellStyle2.setFillForegroundColor(HSSFColor.LIGHT_YELLOW.index);
@@ -106,8 +108,8 @@ public class Etudiants_list extends AppCompatActivity {
 
 
 
-        //Now we are creating sheet
-        Sheet sheet = null;
+
+        Sheet sheet = null;     //créer le sheet (tableau)
         String classe = this.getTitle().toString();
         Date date = Calendar.getInstance().getTime();
         DateFormat dateFormat = new SimpleDateFormat("   yyyy-MMM-dd   HH:mm");
@@ -115,14 +117,14 @@ public class Etudiants_list extends AppCompatActivity {
         sheet = wb.createSheet("ENSI" + " - " + classe);
         sheet.setDefaultRowHeight((short) 350);
 
-        //Now column and row
-        Row row = sheet.createRow(0);
 
-        cell = row.createCell(1);
+        Row row = sheet.createRow(0);     //créer le premier ligne, ce ligne a deux cases (cells)
+
+        cell = row.createCell(1);       // 1 : la date
         cell.setCellValue("  " + strDate);
         cell.setCellStyle(cellStyle);
 
-        cell = row.createCell(2);
+        cell = row.createCell(2);     // 2 : abscences (tout en appliquant les formats determinés au dessus pour chaque case)
         cell.setCellValue("    Absences");
         cell.setCellStyle(cellStyle);
 
@@ -130,9 +132,9 @@ public class Etudiants_list extends AppCompatActivity {
         for (int i = 1; i < Etudiants.size() + 1; i++) {
 
             Row row2 = sheet.createRow(i);
-            Cell num = row2.createCell(0);
-            Cell list_et = row2.createCell(1);
-            Cell absence = row2.createCell(2);
+            Cell num = row2.createCell(0);  // colone 1 : num d'etudiant
+            Cell list_et = row2.createCell(1); // colone 2 : liste des etudiants
+            Cell absence = row2.createCell(2); //colone 3 : l'affectation fait pour chaque etudiant (absent ou non)
             String name = Etudiants.get(i - 1).getStudent_name();
             String ab = Etudiants.get(i-1).getChecked();
             String stri = String.valueOf(i);
@@ -153,20 +155,20 @@ public class Etudiants_list extends AppCompatActivity {
         int compt = 0;
         String dirpath = getExternalFilesDir(null).getAbsolutePath();
         File file = new File(dirpath + "/ENSI_" + classe + "_" + compt + ".xls");
-        compt++;
 
         String lastFilePath = null;
 
         if (file.exists()) {
             lastFilePath = file.getAbsolutePath();
+            compt++;
         }
 
         FileOutputStream outputStream = null;
 
 
         try {
-            outputStream = new FileOutputStream(file);
-            wb.write(outputStream);
+            outputStream = new FileOutputStream(file); //c'est la classe (flux) permettant d'ecrir les données
+            wb.write(outputStream);     //création du fichier
             Toast.makeText(getApplicationContext(), "SAVED", Toast.LENGTH_LONG).show();
         } catch (IOException e) {
             e.printStackTrace();
@@ -178,6 +180,8 @@ public class Etudiants_list extends AppCompatActivity {
             }
         }
     }
+
+    //pour que l'application sera capable d'ecrir ces données au stockage externe, on ajoute une permission au fichier manifest.
 
 
 

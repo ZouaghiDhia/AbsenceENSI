@@ -10,7 +10,6 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".Etudiants_list"></activity>
-        <activity android:name=".newActivity2" />
         <activity android:name=".newActivity1" />
         <activity android:name=".HomeActivity" />
         <activity android:name=".MainActivity">
