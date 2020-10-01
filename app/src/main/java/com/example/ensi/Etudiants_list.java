@@ -6,6 +6,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.CheckedTextView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -55,8 +56,7 @@ public class Etudiants_list extends AppCompatActivity {
         this.setTitle(classname + " - " + modulename);
 
 
-            String [] dataetudiants = {"Nom1   Prénom1" , "Nom2   Prénom2" , "Nom3   Prénom3" , "Nom4   Prénom4" , "Nom5   Prénom5" , "Nom6   Prénom6" , "Nom7   Prénom7" , "Nom8   Prénom8" , "Nom9   Prénom9" ,"Nom10  Prénom10"};
-
+        String[] dataetudiants = {"Nom1   Prénom1", "Nom2   Prénom2", "Nom3   Prénom3", "Nom4   Prénom4", "Nom5   Prénom5", "Nom6   Prénom6", "Nom7   Prénom7", "Nom8   Prénom8", "Nom9   Prénom9", "Nom10  Prénom10"};
 
 
         ListView listview = (ListView) findViewById(R.id.listview);
@@ -71,19 +71,22 @@ public class Etudiants_list extends AppCompatActivity {
         listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {      //mal9it manekteb 7asitou wadhe7 tbh
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
+                CheckedTextView ch = findViewById(R.id.txt_ch);
                 String selectedItem = ((TextView) view).getText().toString();
+
                 if (Etudiants.get(position).getStudent_name().equals(selectedItem)) {
-                    Etudiants.get(position).setChecked("A");
-
-                }
-                else{
                     Etudiants.get(position).setChecked("");
-                }
-            }
-        });
 
+                }
+
+            }
+
+
+        });
     }
+
+
+
 
     public void export(View view) { // la création d'un fichier excel a eté fait grace à l'implémentation du biblioteque apache POI
 
@@ -106,9 +109,6 @@ public class Etudiants_list extends AppCompatActivity {
         cellStyle2.setBorderLeft(BorderStyle.THIN);
 
 
-
-
-
         Sheet sheet = null;     //créer le sheet (tableau)
         String classe = this.getTitle().toString();
         Date date = Calendar.getInstance().getTime();
@@ -128,57 +128,64 @@ public class Etudiants_list extends AppCompatActivity {
         cell.setCellValue("    Absences");
         cell.setCellStyle(cellStyle);
 
+        int r = 1;
+        for (int i = 0; i < Etudiants.size(); i++) {
+            if (Etudiants.get(i).getChecked().equals("A")) {
 
-        for (int i = 1; i < Etudiants.size() + 1; i++) {
+                Row row2 = sheet.createRow(r);
+                Cell num = row2.createCell(0);  // colone 1 : num d'etudiant
+                Cell list_et = row2.createCell(1); // colone 2 : liste des etudiants
+                Cell absence = row2.createCell(2); //colone 3 : l'affectation fait pour chaque etudiant (absent ou non)
 
-            Row row2 = sheet.createRow(i);
-            Cell num = row2.createCell(0);  // colone 1 : num d'etudiant
-            Cell list_et = row2.createCell(1); // colone 2 : liste des etudiants
-            Cell absence = row2.createCell(2); //colone 3 : l'affectation fait pour chaque etudiant (absent ou non)
-            String name = Etudiants.get(i - 1).getStudent_name();
-            String ab = Etudiants.get(i-1).getChecked();
-            String stri = String.valueOf(i);
+                String name = Etudiants.get(i).getStudent_name();
+                String ab = Etudiants.get(i).getChecked();
+                String stri = String.valueOf(i + 1);
 
-            list_et.setCellValue("     " + name);
-            num.setCellValue("  Etudiant " + stri);
-            absence.setCellValue("   " + ab);
-            num.setCellStyle(cellStyle);
-            absence.setCellStyle(cellStyle2);
-            list_et.setCellStyle(cellStyle2);
+                list_et.setCellValue("     " + name);
+                num.setCellValue("  Etudiant " + stri);
+                absence.setCellValue("   " + ab);
+                num.setCellStyle(cellStyle);
+                absence.setCellStyle(cellStyle2);
+                list_et.setCellStyle(cellStyle2);
+                r++;
+                 }
 
-        }
-
-        sheet.setColumnWidth(0, (100 * 50));
-        sheet.setColumnWidth(1, (100 * 50));
-        sheet.setColumnWidth(2, (100 * 30));
-
-        int compt = 0;
-        String dirpath = getExternalFilesDir(null).getAbsolutePath();
-        File file = new File(dirpath + "/ENSI_" + classe + "_" + compt + ".xls");
-
-        String lastFilePath = null;
-
-        if (file.exists()) {
-            lastFilePath = file.getAbsolutePath();
-            compt++;
-        }
-
-        FileOutputStream outputStream = null;
-
-
-        try {
-            outputStream = new FileOutputStream(file); //c'est la classe (flux) permettant d'ecrir les données
-            wb.write(outputStream);     //création du fichier
-            Toast.makeText(getApplicationContext(), "SAVED", Toast.LENGTH_LONG).show();
-        } catch (IOException e) {
-            e.printStackTrace();
-            try {
-                wb.close();
-
-            } catch (IOException ex) {
-                ex.printStackTrace();
             }
-        }
+
+
+            sheet.setColumnWidth(0, (100 * 50));
+            sheet.setColumnWidth(1, (100 * 50));
+            sheet.setColumnWidth(2, (100 * 30));
+
+
+            int compt = 0;
+            String dirpath = getExternalFilesDir(null).getAbsolutePath();
+            File file = new File(dirpath + "/ENSI_" + classe + "_" + compt + ".xls");
+
+            String lastFilePath = null;
+
+            if (file.exists()) {
+                lastFilePath = file.getAbsolutePath();
+                compt++;
+            }
+
+            FileOutputStream outputStream = null;
+
+
+            try {
+                outputStream = new FileOutputStream(file); //c'est la classe (flux) permettant d'ecrir les données
+                wb.write(outputStream);     //création du fichier
+                Toast.makeText(getApplicationContext(), "SAVED", Toast.LENGTH_LONG).show();
+            } catch (IOException e) {
+                e.printStackTrace();
+                try {
+                    wb.close();
+
+                } catch (IOException ex) {
+                    ex.printStackTrace();
+                }
+            }
+
     }
 
     //pour que l'application sera capable d'ecrir ces données au stockage externe, on ajoute une permission au fichier manifest.

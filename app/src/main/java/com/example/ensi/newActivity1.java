@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -38,13 +39,12 @@ public class newActivity1 extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         this.setTitle("Classes");
+        ImageView Remove = findViewById(R.id.OptionsMenu);
 
 
         loadData();
         creerRecyclerView();
         setbouton();
-
-
 
     }
 
@@ -54,19 +54,26 @@ public class newActivity1 extends AppCompatActivity {
         SharedPreferences.Editor editor = sharedPreferences.edit();
         Gson gson = new Gson();
         String json = gson.toJson(Classes);
-        editor.putString("task list", json);
+        editor.putString("key", json);
         editor.apply();
     }
 
     private void loadData() {
         SharedPreferences sharedPreferences = getSharedPreferences("shared preferences", MODE_PRIVATE);
         Gson gson = new Gson();
-        String json = sharedPreferences.getString("task list", null);
+        String json = sharedPreferences.getString("key", null);
         Type type = new TypeToken<ArrayList<Class>>() {}.getType();
         Classes = gson.fromJson(json, type);
         if (Classes == null) {
             Classes = new ArrayList<>();
         }
+    }
+
+    private void removeValue() {
+        SharedPreferences sharedPreferences = getSharedPreferences("shared preferences", MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.remove("key");
+        editor.apply();
     }
 
 
@@ -80,6 +87,7 @@ public class newActivity1 extends AppCompatActivity {
         mAdapter = new MyAdapter(Classes, listener);
         mRecyclerView.setLayoutManager(mLayoutManager); //attacher le layoutmanager au recyclerview
         mRecyclerView.setAdapter(mAdapter); //attacher l'adapter au recyclerview
+
 
     }
 
@@ -154,6 +162,7 @@ public class newActivity1 extends AppCompatActivity {
         Classes.add(new Class(line1));
         mAdapter.notifyItemInserted(Classes.size());
     }
+
 
 
 

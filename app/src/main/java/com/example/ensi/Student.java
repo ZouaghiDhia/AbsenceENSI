@@ -14,7 +14,7 @@ public class Student {
 
     public Student(String student_name) {
         this.student_name = student_name;
-        this.checked = "";
+        this.checked = "A";
     }
 
     public String getStudent_name() {

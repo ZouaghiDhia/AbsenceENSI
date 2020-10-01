@@ -44,7 +44,7 @@
             android:layout_marginRight="33dp"
             android:paddingLeft="2dp"
             android:paddingTop="20dp"
-            android:src="@drawable/remove" />
+            android:src="@drawable/remove2" />
 
 
     </RelativeLayout>

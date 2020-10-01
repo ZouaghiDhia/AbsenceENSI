@@ -1,5 +1,6 @@
 package com.example.ensi;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -22,8 +23,8 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
     }
 
     // lorsque on a crée la classe MyAdapter qui sert à l'adaption des données
-    // au "recyclerview" et la determination du "view holder" pour l'affichage de ces données,
-    //3 overrides methodes sont automatiquement crées :
+    //au "recyclerview" et la determination du "view holder" pour l'affichage de ces données,
+    //3 overrides methodes sont automatiquement crées
 
     //onCreateViewHolder(ViewGroup parent, int viewType)
     //onBindViewHolder(RecyclerView.ViewHolder holder, int position)
@@ -77,8 +78,11 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
                 notifyDataSetChanged();
                 notifyItemRemoved(position);
                 Toast.makeText(view.getContext(), "deleted", Toast.LENGTH_SHORT).show();
+
+
             }
         });
+
 
     }
 
@@ -95,6 +99,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
     //Contairement au listview, Le recyclerview n'a pas de setOnItemClickListener pour passer à un autre activité
     // nous devons donc créer notre propre façon de le faire et c'est par l'implémentation de notre interface mClickListener dans l'adapter avec un SEULE méthode de rappel monclick(callback method)
     //il faut passer l'interface listener (de type mClickListener) comme paramétre au constructeur
+
 
 
 }
